@@ -2,11 +2,13 @@ import axios from 'axios'
 import React, { useEffect, useState } from "react"
 
 export default function Home() {
+    
     let [data, setData] = useState([])
 
     async function fetchData() {
         const response = await axios.get(`http://localhost:3000/get`)
         setData(response.data.data);
+        
     }
 
     useEffect(() => {

@@ -9,6 +9,7 @@ const PORT = process.env.PORT
 const SECRET = process.env.SECRET;
 const DB_URL = process.env.DB_URL;
 const baseURL = process.env.baseURL;
+const fs = require('fs')
 
 const problemSchema = new mongoose.Schema({
     id: Number,
@@ -26,8 +27,24 @@ app.post(`/add`, (req, res) => {
     newProblem.save()
     res.json({ message: "problem added successfully" })
 })
+app.post('/addcode', (req, res) => {
+    console.log("backend")
+    const newCode = {
+        id: Math.floor(Math.random() * 1000000),
+        code: req.body.code,
+    };
+    fs.readFile("data.json", "utf8", (err, data) => {
+        if (err) throw err;
+        const code = JSON.parse(data);
+        code.push(newCode);
+        fs.writeFile("data.json", JSON.stringify(code), (err) => {
+            if (err) throw err;
+            res.status(201).json(newCode);
+        });
+    });
+});
 app.get(`/get`, async (req, res) => {
-        const data = await Problem.find({});
+    const data = await Problem.find({});
     res.json({ data });
 })
 
